@@ -62,3 +62,10 @@
     });
 
 })(jQuery); // End of use strict
+
+
+    /**
+     * Handles the sign in button press.
+     */
+   
+  

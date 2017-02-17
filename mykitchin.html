@@ -1,7 +1,7 @@
- <!DOCTYPE html>
- <html lang="en">
+<!DOCTYPE html>
+<html lang="en">
 
- <head>
+<head>
   <!-- <meta http-equiv="Content-Security-Policy" content="default-src 'self'"> -->
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -96,13 +96,36 @@
             white-space:nowrap;
             text-overflow: ellipsis;
           }
-          div.loc {
-            padding: 5px;
-            margin: 3px;
-            text-align: center;
-            overflow:hidden;
-            white-space:nowrap;
-            text-overflow: ellipsis;
+          .create {
+            width: 60%;
+            background-color: #F05F40;
+            position: relative;
+            min-height: 1px;
+            padding-right: 15px;
+            padding-left: 15px;
+            padding-top: 8px;
+            padding-bottom: 8px;
+            margin-bottom: 20px;
+            min-height: 28px;
+            color: #fff;
+            border-radius: 5px;
+            word-wrap: normal;
+          }
+
+          .create:hover {
+            background-color: #e1e1e1;
+            border: 1px solid #e1e1e1;
+            color: #666;
+          }
+          .divider {
+            display: block;
+            margin-top: 0.5em;
+            margin-bottom: 0.5em;
+            margin-left: auto;
+            margin-right: auto;
+            border-style: inset;
+            border-width: 1px;
+
           }
         </style>
         <script src="https://www.gstatic.com/firebasejs/3.6.9/firebase.js"></script>
@@ -134,75 +157,50 @@
      */
      function initApp() {
       firebase.auth().onAuthStateChanged(function(user) {
-
-        if (user) {
-          // User is signed in.
-          var userID = user.uid;
-          var email = user.email;
-
-          console.log("here");
-          var projectRef = firebase.database().ref('projects/').orderByKey();
-          projectRef.once("value")
-          .then(function(snapshot) {
-            snapshot.forEach(function(childSnapshot){
-              var project = childSnapshot.val();
-              var new_project = document.createElement('div');
-              new_project.style.borderWidth = "0";
-              new_project.setAttribute("class", "img");
-              var project_image = document.createElement("img");
-              project_image.setAttribute("src", project.projImg);
-              project_image.setAttribute("alt", "New project");
-              project_image.setAttribute("width", "100");
-              project_image.setAttribute("height","200");
-              var to_center = document.createElement('center');
-              to_center.appendChild(project_image);
-              new_project.appendChild(to_center);
-
-              var new_title = document.createElement('div');
-              new_title.setAttribute("class", "tit");
-              new_title.appendChild(document.createTextNode(project.title));
-
-              var new_loc = document.createElement('div');
-              new_loc.setAttribute("class", "loc");
-              new_loc.appendChild(document.createTextNode(project.location));
-              new_loc.style.textAlign = "justify";
+      // [START_EXCLUDE silent]
+      // [END_EXCLUDE]
+      if (user) {
+        // User is signed in.
+        var userID = user.uid;
+        var email = user.email;
+        var userRef = firebase.database().ref('users/' + userID + '/projects').orderByKey();
 
 
-              var new_rate = document.createElement('div');
-              new_rate.setAttribute("class", "tit");
-              new_rate.innerHTML = "&#9733;&#9733;&#9733;&#9733;&#9733;"
+        var projectList = document.getElementById("div1");
+        //projectList.style.listStyleType = "none";
 
-              var new_description = document.createElement('div');
-              new_description.setAttribute("class", "desc");
-              new_description.appendChild(document.createTextNode(project.description));
-              new_description.style.textAlign = "justify";
-              var project_link = document.createElement('a');
+        userRef.once("value")
+        .then(function(snapshot) {
+          snapshot.forEach(function(childSnapshot){
 
-              project_link.setAttribute("href",'#');
-              project_link.style.borderWidth = "0";
-              project_link.appendChild(new_title);
-              new_project.appendChild(project_link);
-              new_project.appendChild(new_loc);
-              new_project.appendChild(new_rate);
-              new_project.appendChild(new_description);
-              var portfolio = document.getElementById("portfolio");
-              portfolio.appendChild(new_project);
-              //var HR = document.createElement("HR");
-              //new_project.appendChild(HR);
-              });
+            var projectID = childSnapshot.val();
+
+            var projRef = firebase.database().ref('projects/' + projectID).orderByKey();
+            projRef.on('value', function(snapshot) {
+              var projectTitle = snapshot.child("title").val();
+              var center = document.createElement('center');
+
+              var x = document.createElement("LI");
+              var link = document.createElement("a");
+              var node = document.createTextNode(projectTitle);
+
+              //link.onclick = "keepID(this)";
+              x.appendChild(link);
+              var divider = document.createElement("div");
+              divider.setAttribute('class', 'divider');
+              x.appendChild(divider);
+              link.appendChild(node);
+              center.appendChild(x);
+              projectList.appendChild(center);
             });
 
-            var userRef = firebase.database().ref('users/' + userID);
-            userRef.on('value', function(snapshot) {
-            var fullName = snapshot.val().fullname;
-            var phoneNumber = snapshot.val().phone;
-            //var fullName = snapshot.val().fullname;
-            console.log(fullName + phoneNumber);
           });
-
+        }); 
       } else {
         window.location.href="index.html";
       }
+        // [START_EXCLUDE silent]
+        // [END_EXCLUDE]
       });
       
       // [END authstatelistener]
@@ -231,20 +229,16 @@
       <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
         <ul class="nav navbar-nav navbar-right">
           <li>
-            <a class="page-scroll" href="./help_signedin.html">Help</a>
-          </li>
-          <li>
-            <a class="page-scroll" href="./mykitchin.html">My Kitchin</a>
-          </li>
-          <li>
             <a class="page-scroll" href="./index_signedin.html">Home</a>
           </li>
           <li>
-            <a href="#" id="quickstart-sign-out">Sign Out</a>
+            <a class="page-scroll" href="./search.html">Food Court</a>
           </li>
-
           <li>
             <a class="page-scroll" href="./help_signedin.html">Help</a>
+          </li>
+          <li>
+            <a href="#" id="quickstart-sign-out">Sign Out</a>
           </li>
         </ul>
       </div>
@@ -252,47 +246,56 @@
     </div>
     <!-- /.container-fluid -->
   </nav>
-  <section>
-    <div class="container" id="portfolio">
-
-      <!-- Page Header -->
-      <div class="row" style="position: relative; bottom: 20px;">
-        <div class="col-lg-12">
-          <center><h4 style="text-transform: uppercase; margin-bottom: -10px;"><strong>Discover</strong> Food</h4><hr></center>
-        </div>
+  <div class="container" style="position: relative; top: 100px;">
+    <!-- Page Header -->
+    <div class="row">
+      <div class="col-lg-12">
+        <center><h4 style="text-transform: uppercase;"><strong>MY</strong> KITCHIN</h4></center>
       </div>
-      <!-- <div id="search">
-        <input type="text" id="searchbox" placeholder="Search by food or location" />
-        <button type="button" id="search_button" onclick="search()">SEARCH</button>
-      </div> -->
+    </div> 
+    <hr>
+    <!-- /.row -->
+    <!-- Projects Row -->
 
-
-
+    <div class="row">
+      <div class="col-lg-12">
+        <center><a href="create.html"><div class="create"><strong>Make A New Dish</strong></div></a></center>
+        <div class="divider"></div>
+        <ul id="div1" style="list-style-type: none; margin-left: -35px; ">
+        </ul>
+      </div>
     </div>
 
+  </div>
+  
+
+
+
+</body>
 
 
 
 
 
-  </section>
 
+<!-- jQuery -->
+<script src="vendor/jquery/jquery.min.js"></script>
 
+<!-- Bootstrap Core JavaScript -->
+<script src="vendor/bootstrap/js/bootstrap.min.js"></script>
 
+<!-- Plugin JavaScript -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-easing/1.3/jquery.easing.min.js"></script>
+<script src="vendor/scrollreveal/scrollreveal.min.js"></script>
+<script src="vendor/magnific-popup/jquery.magnific-popup.min.js"></script>
 
-  <!-- jQuery -->
-  <script src="vendor/jquery/jquery.min.js"></script>
-
-  <!-- Bootstrap Core JavaScript -->
-  <script src="vendor/bootstrap/js/bootstrap.min.js"></script>
-
-  <!-- Plugin JavaScript -->
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-easing/1.3/jquery.easing.min.js"></script>
-  <script src="vendor/scrollreveal/scrollreveal.min.js"></script>
-  <script src="vendor/magnific-popup/jquery.magnific-popup.min.js"></script>
-
-  <!-- Theme JavaScript -->
-  <script src="js/creative.min.js"></script>
+<!-- Theme JavaScript -->
+<script src="js/creative.min.js"></script>
+<script type="text/javascript">
+  function search(){
+    window.location.href = './search.html';
+  }
+</script>
 
 </body>
 

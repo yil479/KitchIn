@@ -1,7 +1,7 @@
- <!DOCTYPE html>
- <html lang="en">
+<!DOCTYPE html>
+<html lang="en">
 
- <head>
+<head>
   <!-- <meta http-equiv="Content-Security-Policy" content="default-src 'self'"> -->
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -24,6 +24,7 @@
 
   <!-- Theme CSS -->
   <link href="css/creative.min.css" rel="stylesheet">
+  <link href="css/creative.css" rel="stylesheet">
 
   <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
   <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
@@ -96,13 +97,26 @@
             white-space:nowrap;
             text-overflow: ellipsis;
           }
-          div.loc {
-            padding: 5px;
-            margin: 3px;
-            text-align: center;
-            overflow:hidden;
-            white-space:nowrap;
-            text-overflow: ellipsis;
+          .create {
+            width: 60%;
+            background-color: #F05F40;
+            position: relative;
+            min-height: 1px;
+            padding-right: 15px;
+            padding-left: 15px;
+            padding-top: 8px;
+            padding-bottom: 8px;
+            margin-bottom: 20px;
+            min-height: 28px;
+            color: #fff;
+            border-radius: 5px;
+            word-wrap: normal;
+          }
+
+          .create:hover {
+            background-color: #e1e1e1;
+            border: 1px solid #e1e1e1;
+            color: #666;
           }
         </style>
         <script src="https://www.gstatic.com/firebasejs/3.6.9/firebase.js"></script>
@@ -126,6 +140,40 @@
       console.error('Sign Out Error', error);
     });
   }
+  function saveProjectInfo() {
+    var title = document.getElementById('title');
+    var description = document.getElementById('description');
+
+    var location = document.getElementById('location');
+
+    var projImg = document.getElementById('projImg');
+
+    var userID = firebase.auth().currentUser.uid;
+    var userRef = firebase.database().ref('users/' + userID + '/projects');
+
+    var userinfo = firebase.database().ref('users/' + userID);
+    var projRef = firebase.database().ref('projects');
+
+    var newProjRef = projRef.push();
+    newProjRef.set({
+      title: title.value, 
+      description: description.value,
+      location: location.value,
+      projImg: projImg.value
+
+    }, function(onComplete){
+        var projID = newProjRef.key;
+        userRef.push(projID);
+        alert("Your food has been created!");
+        window.location.href="mykitchin.html";
+      });
+
+    
+
+    
+    //window.location.href="mykitchin.html";
+
+  }
 
     /**
      * initApp handles setting up UI event listeners and registering Firebase auth listeners:
@@ -133,85 +181,27 @@
      *    out, and that is where we update the UI.
      */
      function initApp() {
+      // Listening for auth state changes.
+      // [START authstatelistener]
       firebase.auth().onAuthStateChanged(function(user) {
 
         if (user) {
           // User is signed in.
-          var userID = user.uid;
-          var email = user.email;
 
-          console.log("here");
-          var projectRef = firebase.database().ref('projects/').orderByKey();
-          projectRef.once("value")
-          .then(function(snapshot) {
-            snapshot.forEach(function(childSnapshot){
-              var project = childSnapshot.val();
-              var new_project = document.createElement('div');
-              new_project.style.borderWidth = "0";
-              new_project.setAttribute("class", "img");
-              var project_image = document.createElement("img");
-              project_image.setAttribute("src", project.projImg);
-              project_image.setAttribute("alt", "New project");
-              project_image.setAttribute("width", "100");
-              project_image.setAttribute("height","200");
-              var to_center = document.createElement('center');
-              to_center.appendChild(project_image);
-              new_project.appendChild(to_center);
-
-              var new_title = document.createElement('div');
-              new_title.setAttribute("class", "tit");
-              new_title.appendChild(document.createTextNode(project.title));
-
-              var new_loc = document.createElement('div');
-              new_loc.setAttribute("class", "loc");
-              new_loc.appendChild(document.createTextNode(project.location));
-              new_loc.style.textAlign = "justify";
-
-
-              var new_rate = document.createElement('div');
-              new_rate.setAttribute("class", "tit");
-              new_rate.innerHTML = "&#9733;&#9733;&#9733;&#9733;&#9733;"
-
-              var new_description = document.createElement('div');
-              new_description.setAttribute("class", "desc");
-              new_description.appendChild(document.createTextNode(project.description));
-              new_description.style.textAlign = "justify";
-              var project_link = document.createElement('a');
-
-              project_link.setAttribute("href",'#');
-              project_link.style.borderWidth = "0";
-              project_link.appendChild(new_title);
-              new_project.appendChild(project_link);
-              new_project.appendChild(new_loc);
-              new_project.appendChild(new_rate);
-              new_project.appendChild(new_description);
-              var portfolio = document.getElementById("portfolio");
-              portfolio.appendChild(new_project);
-              //var HR = document.createElement("HR");
-              //new_project.appendChild(HR);
-              });
-            });
-
-            var userRef = firebase.database().ref('users/' + userID);
-            userRef.on('value', function(snapshot) {
-            var fullName = snapshot.val().fullname;
-            var phoneNumber = snapshot.val().phone;
-            //var fullName = snapshot.val().fullname;
-            console.log(fullName + phoneNumber);
-          });
-
-      } else {
-        window.location.href="index.html";
-      }
+        } else {
+          window.location.href="./index.html";
+        }
       });
-      
       // [END authstatelistener]
       document.getElementById('quickstart-sign-out').addEventListener('click', signOut);
+      document.getElementById('quickstart-save-project').addEventListener('click', saveProjectInfo);
     }
+
 
     window.onload = function() {
       initApp();
     };
+
   </script>
 </head>
 
@@ -231,20 +221,10 @@
       <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
         <ul class="nav navbar-nav navbar-right">
           <li>
-            <a class="page-scroll" href="./help_signedin.html">Help</a>
-          </li>
-          <li>
-            <a class="page-scroll" href="./mykitchin.html">My Kitchin</a>
-          </li>
-          <li>
             <a class="page-scroll" href="./index_signedin.html">Home</a>
           </li>
           <li>
             <a href="#" id="quickstart-sign-out">Sign Out</a>
-          </li>
-
-          <li>
-            <a class="page-scroll" href="./help_signedin.html">Help</a>
           </li>
         </ul>
       </div>
@@ -252,30 +232,89 @@
     </div>
     <!-- /.container-fluid -->
   </nav>
-  <section>
-    <div class="container" id="portfolio">
+  
+  <div class="container">
 
-      <!-- Page Header -->
-      <div class="row" style="position: relative; bottom: 20px;">
-        <div class="col-lg-12">
-          <center><h4 style="text-transform: uppercase; margin-bottom: -10px;"><strong>Discover</strong> Food</h4><hr></center>
-        </div>
+
+    <!-- Page Header -->
+    <div class="row" style="margin-top: 60px;margin-bottom: 20px;">
+      <div class="col-lg-12">
+        <center><h4 style="text-transform: uppercase; margin-bottom: -10px;"><strong>CREATE</strong> A NEW ORDER</h4></center>
       </div>
-      <!-- <div id="search">
-        <input type="text" id="searchbox" placeholder="Search by food or location" />
-        <button type="button" id="search_button" onclick="search()">SEARCH</button>
-      </div> -->
+      <hr>
+    </div> 
+    
+    <!-- /.row -->
+    <!-- Projects Row -->
 
+    <div class="row">
+      <div class="col-lg-12">
+        <table>
+          <tr>
+            <td style="padding-right: 20px;">
+              Food Name: 
+            </td>
+            <td>
+              <input type="text" id="title" name="title" style="width: 90%; border: 1px #999 solid;">
+            </td>
+          </tr>
+          <tr><td><br /></td></tr>
+          <tr>
+            <td style="padding-right: 20px;">
+              Description: 
+            </td>
+            <td>
+              <textarea name="description" id="description" rows="4" style="width: 90%; border: 1px #999 solid;"></textarea>
+            </td>
+          </tr>
+          <tr><td><br /></td></tr>
+          <tr>
+            <td style="padding-right: 20px;">
+              Location
+            </td>
+            <td>
+              <textarea name="significance" id="location" rows="4" style="width: 90%; border: 1px #999 solid;"></textarea>
+            </td>
+          </tr>
+          <tr><td><br /></td></tr>
+          <tr>
+            <td style="padding-right: 20px;">
+              Food Image (URL):
+            </td>
+            <td>
+              <input type="text" id="projImg" name="projImg" style="width: 90%; border: 1px #999 solid;">
+            </td>
+          </tr>
+          <tr><td><br /></td></tr>
+          
 
+            <!--
+            <tr><td><br /></td></tr>
+            <tr>
+                <td style="padding-right: 20px;">
+                    Video Pitches: 
+                </td>
+                <td>
+                    <input id="uploadFile" placeholder="Choose File" disabled="disabled" />
+                    <div class="fileUpload btn btn-primary">
+                        <span>Upload</span>
+                        <input id="uploadBtn" type="file" class="upload" />
+                    </div>
+                </td>
+            </tr>
+          -->
+        </table>
+        <br /><br />
+        <center><a href="#"><div class="login_button" id="quickstart-save-project">SUBMIT</div></a><br /></center>            </div>
+      </div>
 
     </div>
 
 
 
+  </body>
 
 
-
-  </section>
 
 
 
@@ -293,6 +332,11 @@
 
   <!-- Theme JavaScript -->
   <script src="js/creative.min.js"></script>
+  <script type="text/javascript">
+    function search(){
+      window.location.href = './search.html';
+    }
+  </script>
 
 </body>
 

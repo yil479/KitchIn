@@ -133,80 +133,56 @@
      *    out, and that is where we update the UI.
      */
      function initApp() {
-      firebase.auth().onAuthStateChanged(function(user) {
+      var projectRef = firebase.database().ref('projects/').orderByKey();
+      projectRef.once("value")
+      .then(function(snapshot) {
+        snapshot.forEach(function(childSnapshot){
+          var project = childSnapshot.val();
+          var new_project = document.createElement('div');
+          new_project.style.borderWidth = "0";
+          new_project.setAttribute("class", "img");
+          var project_image = document.createElement("img");
+          project_image.setAttribute("src", project.projImg);
+          project_image.setAttribute("alt", "New project");
+          project_image.setAttribute("width", "100");
+          project_image.setAttribute("height","200");
+          var to_center = document.createElement('center');
+          to_center.appendChild(project_image);
+          new_project.appendChild(to_center);
 
-        if (user) {
-          // User is signed in.
-          var userID = user.uid;
-          var email = user.email;
+          var new_title = document.createElement('div');
+          new_title.setAttribute("class", "tit");
+          new_title.appendChild(document.createTextNode(project.title));
 
-          console.log("here");
-          var projectRef = firebase.database().ref('projects/').orderByKey();
-          projectRef.once("value")
-          .then(function(snapshot) {
-            snapshot.forEach(function(childSnapshot){
-              var project = childSnapshot.val();
-              var new_project = document.createElement('div');
-              new_project.style.borderWidth = "0";
-              new_project.setAttribute("class", "img");
-              var project_image = document.createElement("img");
-              project_image.setAttribute("src", project.projImg);
-              project_image.setAttribute("alt", "New project");
-              project_image.setAttribute("width", "100");
-              project_image.setAttribute("height","200");
-              var to_center = document.createElement('center');
-              to_center.appendChild(project_image);
-              new_project.appendChild(to_center);
-
-              var new_title = document.createElement('div');
-              new_title.setAttribute("class", "tit");
-              new_title.appendChild(document.createTextNode(project.title));
-
-              var new_loc = document.createElement('div');
-              new_loc.setAttribute("class", "loc");
-              new_loc.appendChild(document.createTextNode(project.location));
-              new_loc.style.textAlign = "justify";
+          var new_loc = document.createElement('div');
+          new_loc.setAttribute("class", "loc");
+          new_loc.appendChild(document.createTextNode(project.location));
+          new_loc.style.textAlign = "justify";
 
 
-              var new_rate = document.createElement('div');
-              new_rate.setAttribute("class", "tit");
-              new_rate.innerHTML = "&#9733;&#9733;&#9733;&#9733;&#9733;"
+          var new_rate = document.createElement('div');
+          new_rate.setAttribute("class", "tit");
+          new_rate.innerHTML = "&#9733;&#9733;&#9733;&#9733;&#9733;"
 
-              var new_description = document.createElement('div');
-              new_description.setAttribute("class", "desc");
-              new_description.appendChild(document.createTextNode(project.description));
-              new_description.style.textAlign = "justify";
-              var project_link = document.createElement('a');
+          var new_description = document.createElement('div');
+          new_description.setAttribute("class", "desc");
+          new_description.appendChild(document.createTextNode(project.description));
+          new_description.style.textAlign = "justify";
+          var project_link = document.createElement('a');
 
-              project_link.setAttribute("href",'#');
-              project_link.style.borderWidth = "0";
-              project_link.appendChild(new_title);
-              new_project.appendChild(project_link);
-              new_project.appendChild(new_loc);
-              new_project.appendChild(new_rate);
-              new_project.appendChild(new_description);
-              var portfolio = document.getElementById("portfolio");
-              portfolio.appendChild(new_project);
+          project_link.setAttribute("href",'#');
+          project_link.style.borderWidth = "0";
+          project_link.appendChild(new_title);
+          new_project.appendChild(project_link);
+          new_project.appendChild(new_loc);
+          new_project.appendChild(new_rate);
+          new_project.appendChild(new_description);
+          var portfolio = document.getElementById("portfolio");
+          portfolio.appendChild(new_project);
               //var HR = document.createElement("HR");
               //new_project.appendChild(HR);
-              });
             });
-
-            var userRef = firebase.database().ref('users/' + userID);
-            userRef.on('value', function(snapshot) {
-            var fullName = snapshot.val().fullname;
-            var phoneNumber = snapshot.val().phone;
-            //var fullName = snapshot.val().fullname;
-            console.log(fullName + phoneNumber);
-          });
-
-      } else {
-        window.location.href="index.html";
-      }
       });
-      
-      // [END authstatelistener]
-      document.getElementById('quickstart-sign-out').addEventListener('click', signOut);
     }
 
     window.onload = function() {
@@ -231,20 +207,13 @@
       <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
         <ul class="nav navbar-nav navbar-right">
           <li>
-            <a class="page-scroll" href="./help_signedin.html">Help</a>
+            <a class="page-scroll" href="./help.html">Help</a>
           </li>
           <li>
-            <a class="page-scroll" href="./mykitchin.html">My Kitchin</a>
+            <a class="page-scroll" href="./index.html">Home</a>
           </li>
           <li>
-            <a class="page-scroll" href="./index_signedin.html">Home</a>
-          </li>
-          <li>
-            <a href="#" id="quickstart-sign-out">Sign Out</a>
-          </li>
-
-          <li>
-            <a class="page-scroll" href="./help_signedin.html">Help</a>
+            <a class="page-scroll" href="./login.html">Login</a>
           </li>
         </ul>
       </div>
@@ -261,10 +230,7 @@
           <center><h4 style="text-transform: uppercase; margin-bottom: -10px;"><strong>Discover</strong> Food</h4><hr></center>
         </div>
       </div>
-      <!-- <div id="search">
-        <input type="text" id="searchbox" placeholder="Search by food or location" />
-        <button type="button" id="search_button" onclick="search()">SEARCH</button>
-      </div> -->
+
 
 
 
