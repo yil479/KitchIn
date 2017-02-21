@@ -9,7 +9,7 @@
   <meta name="description" content="">
   <meta name="author" content="">
 
-  <title>Creative - Start Bootstrap Theme</title>
+  <title>Log In</title>
 
   <!-- Bootstrap Core CSS -->
   <link href="vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
@@ -81,7 +81,7 @@
         });
 
         // [END authwithemail]
-      }      
+      }
     }
 
     /**
@@ -100,8 +100,8 @@
 
     function sendPasswordReset() {
       var email = prompt("Please enter your e-mail address");
-      
-      if (email != null) 
+
+      if (email != null)
       {
         firebase.auth().sendPasswordResetEmail(email).then(function() {
           alert('Password Reset Email Sent To ' + email + '!');
@@ -119,7 +119,7 @@
         // [END_EXCLUDE]
       });
       }
-      
+
       // [START sendpasswordemail]
 
       // [END sendpasswordemail];
@@ -190,12 +190,12 @@
         </center>
       </div>
     </div>
-  </div> 
+  </div>
   <!-- /.row -->
-  
 
 
-  
+
+
 </body>
 
 
