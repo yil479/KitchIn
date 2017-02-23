@@ -192,16 +192,27 @@
               link.appendChild(node);
               center.appendChild(x);
               projectList.appendChild(center);
-            });
 
+              function newWindow() {
+                var w = window.open('/new');
+                var html = "content";
+
+                $(w.document.body).html(html);
+              }
+              $(link).click(newWindow);
+
+            });
           });
         });
       } else {
         window.location.href="index.html";
       }
+
+      
+
         // [START_EXCLUDE silent]
         // [END_EXCLUDE]
-      });
+      }); //end of if(user)
 
       // [END authstatelistener]
       document.getElementById('quickstart-sign-out').addEventListener('click', signOut);
