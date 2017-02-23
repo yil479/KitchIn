@@ -13,7 +13,7 @@
     // Highlight the top nav as scrolling occurs
     $('body').scrollspy({
         target: '.navbar-fixed-top',
-        offset: 51
+        offset: 80
     });
 
     // Closes the Responsive Menu on Menu Item Click
@@ -67,5 +67,5 @@
     /**
      * Handles the sign in button press.
      */
-   
-  
+
+
