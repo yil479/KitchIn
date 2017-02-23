@@ -1,0 +1,44 @@
+{
+    "chef": [
+    {
+        "foodname": "chicken pot pie",
+        "picture": "https://68.media.tumblr.com/dbacce336203a333fc56d18245bf9d4e/tumblr_nlnbqdBC331qjojpgo3_500.jpg",
+        "phone": "+1 (123) 456-7890",
+        "address": "UCSD Muir College",
+        "chefname": "Amberly Ngo",
+        "description": "food for the soul"
+    },
+    {
+        "foodname": "grilled chicken salad",
+        "picture": "https://68.media.tumblr.com/2b504d37a3d404ec130964eafade785c/tumblr_n4lqf8BBvM1rrvqt3o1_1280.jpg",
+        "phone": "+1 (123) 456-7890",
+        "address": "UCSD Sixth College",
+        "chefname": "April Gau",
+        "description": "yummy and nutritious"
+    },
+    {
+        "foodname": "honey walnut shrimp",
+        "picture": "https://68.media.tumblr.com/tumblr_lzj70ciR0Q1qc5qfho1_1280.jpg",
+        "phone": "+1 (123) 456-7890",
+        "address": "UCSD Eleanor Roosevelt College",
+        "chefname": "Luis Lu",
+        "description": "authentic food"
+    },
+    {
+        "foodname": "orange chicken",
+        "picture": "https://68.media.tumblr.com/81799faacab9fcdd6b4bfa69970476a2/tumblr_oi8h4vwiz41r8jkpuo1_500.jpg",
+        "phone": "+1 (123) 456-7890",
+        "address": "9500 Gilman Drive, San Diego, CA 92122",
+        "chefname": "Connie Guan",
+        "description": "to satisfy those cravings"
+    },
+    {
+        "foodname": "lasagna",
+        "picture": "lhttps://68.media.tumblr.com/8ced46238da5921c8cda541189fdb088/tumblr_okaw6xLfrr1r8jkpuo1_1280.jpg",
+        "phone": "+1 (123) 456-7890",
+        "address": "7693 Palmilla Drive, San Diego, CA 92122",
+        "chefname": "Kristin Vu",
+        "description": "comfort food"
+    },
+    ]
+}

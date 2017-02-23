@@ -48,7 +48,7 @@
             color: #bbb;
           }
 
-          #search_button {    
+          #search_button {
             background-color: #F05F40; /* Green */
             border: none;
             color: white;
@@ -118,6 +118,110 @@
   firebase.initializeApp(config);
 </script>
 <script type="text/javascript">
+  function search(){
+
+
+    var searchTerm = document.getElementById('searchbox').value;
+    console.log(searchTerm);
+    if(searchTerm.length != 0){
+      console.log("hi");
+      $("#portfolio").empty();
+      console.log("hello");
+      var searchNotFound = true;
+      var oneBackButton = true;
+      var projectRef = firebase.database().ref('projects/').orderByKey();
+      projectRef.once("value")
+      .then(function(snapshot) {
+        snapshot.forEach(function(childSnapshot){
+          var project = childSnapshot.val();
+          var project_title = project.title;
+          var project_location = project.location;
+
+
+          if ((project_title.toLowerCase().indexOf(searchTerm.toLowerCase()) >= 0) || (project_location.toLowerCase().indexOf(searchTerm.toLowerCase()) >= 0)){
+            console.log(searchTerm);
+            var portfolio = document.getElementById("portfolio");
+            searchNotFound = false;
+            if(oneBackButton){
+
+              var go_back_btn = document.createElement('div');
+              var go_back_link = document.createElement("a");
+              go_back_link.innerHTML = "&laquo; Go Back";
+              go_back_link.href = "search.html";
+              go_back_btn.appendChild(go_back_link);
+              go_back_btn.style.marginBottom = "20px";
+              go_back_btn.style.marginLeft = "4%";
+              portfolio.appendChild(go_back_btn);
+              var searchedfor = document.createElement("p");
+              searchedfor.style.textAlign = "center";
+              searchedfor.innerHTML = "You searched for \"" + searchTerm + "\"";
+              portfolio.appendChild(searchedfor);
+              oneBackButton = false;
+            }
+
+            var new_project = document.createElement('div');
+            new_project.style.borderWidth = "0";
+            new_project.setAttribute("class", "img");
+            var project_image = document.createElement("img");
+            project_image.setAttribute("src", project.projImg);
+            project_image.setAttribute("alt", "New project");
+            project_image.setAttribute("width", "100");
+            project_image.setAttribute("height","200");
+            var to_center = document.createElement('center');
+            to_center.appendChild(project_image);
+            new_project.appendChild(to_center);
+
+            var new_title = document.createElement('div');
+            new_title.setAttribute("class", "tit");
+            new_title.appendChild(document.createTextNode(project.title));
+
+            var new_loc = document.createElement('div');
+            new_loc.setAttribute("class", "loc");
+            new_loc.appendChild(document.createTextNode(project.location));
+            new_loc.style.textAlign = "justify";
+
+
+            var new_rate = document.createElement('div');
+            new_rate.setAttribute("class", "tit");
+            new_rate.innerHTML = "&#9733;&#9733;&#9733;&#9733;&#9733;"
+
+            var new_description = document.createElement('div');
+            new_description.setAttribute("class", "desc");
+            new_description.appendChild(document.createTextNode(project.description));
+            new_description.style.textAlign = "justify";
+            var project_link = document.createElement('a');
+
+            project_link.setAttribute("href",'#');
+            project_link.style.borderWidth = "0";
+            project_link.appendChild(new_title);
+            new_project.appendChild(project_link);
+            new_project.appendChild(new_loc);
+            new_project.appendChild(new_rate);
+            new_project.appendChild(new_description);
+            var portfolio = document.getElementById("portfolio");
+            portfolio.appendChild(new_project);
+          }
+
+        });
+
+      }).then(function(onComplete){
+        if(searchNotFound){
+          alert("Sorry, we couldn't find what you're looking for!");
+          window.location.href = "search.html";
+
+        }
+      }, function(error){
+        console.log("Something went wrong!");
+      });
+
+
+    }
+    else{
+      alert("You need to enter something before searching!")
+    }
+
+
+  }
   function signOut(){
     firebase.auth().signOut().then(function() {
       console.log('Signed Out');
@@ -221,15 +325,25 @@
     </div>
     <!-- /.container-fluid -->
   </nav>
+  <!-- Page Header -->
+
   <section>
     <div class="container" id="portfolio">
-
-      <!-- Page Header -->
       <div class="row" style="position: relative; bottom: 20px;">
         <div class="col-lg-12">
           <center><h4 style="text-transform: uppercase; margin-bottom: -10px;"><strong>Discover</strong> Food</h4><hr></center>
         </div>
       </div>
+      <div class="row">
+        <div class="col-lg-12">
+          <div id="search">
+            <input type="text" id="searchbox" placeholder="Search by location or food name" />
+            <button type="button" id="search_button" onclick="search()">SEARCH</button>
+          </div>
+        </div>
+      </div>
+
+
 
 
 
