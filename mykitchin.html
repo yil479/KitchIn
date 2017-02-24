@@ -32,37 +32,6 @@
         <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
         <![endif]-->
         <style type="text/css">
-          #search {
-            width: 93%;
-            margin: 0 auto;
-            margin-bottom: 20px;
-          }
-
-          #searchbox {
-            background-color: #FFF;
-            height: 30px;
-            border: 1px solid #F05F40;
-            border-radius: 5px;
-            width: 80%;
-            padding: 5px;
-            color: #bbb;
-          }
-
-          #search_button {
-            background-color: #F05F40; /* Green */
-            border: none;
-            color: white;
-            text-align: center;
-            padding: 6px;
-            padding-top: 8px;
-            padding-bottom: 8px;
-            width: 17%;
-            text-decoration: none;
-            display: inline;
-            font-size: 11px;
-            float: right;
-            border-radius: 5px;
-          }
           div.img {
             box-shadow: 0px 2px 5px #ccc;
             margin-top: 10px;
@@ -91,6 +60,14 @@
           div.desc {
             padding: 5px;
             margin: 5px;
+            text-align: center;
+            overflow:hidden;
+            white-space:nowrap;
+            text-overflow: ellipsis;
+          }
+          div.loc {
+            padding: 5px;
+            margin: 3px;
             text-align: center;
             overflow:hidden;
             white-space:nowrap;
@@ -192,16 +169,84 @@
               link.appendChild(node);
               center.appendChild(x);
               projectList.appendChild(center);
-            });
 
+
+              var newPostKey = firebase.database().ref().child('projects').push().key;
+
+
+              function newWindow() {
+                //makes new window 800 x 600
+                var w = window.open('','/new', width=600,height=400,menubar=1,status=0,scrollbars=1,resizable=1);
+                // var headHtml = "<html><head><!-- Bootstrap Core CSS --><link href='vendor/bootstrap/css/bootstrap.min.css' rel='stylesheet'><!-- Custom Fonts --><link href='vendor/font-awesome/css/font-awesome.min.css' rel='stylesheet' type='text/css'><link href='https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800' rel='stylesheet' type='text/css'><link href='https://fonts.googleapis.com/css?family=Merriweather:400,300,300italic,400italic,700,700italic,900,900italic' rel='stylesheet' type='text/css'><!-- Plugin CSS --><link href='vendor/magnific-popup/magnific-popup.css' rel='stylesheet'><!-- Theme CSS --><link href='css/creative.min.css' rel='stylesheet'><link href='css/creative.css' rel='stylesheet'></head>";
+                // var bodyHtml = "<body id='page-top'><div class='container' id='portfolio'></div></body></html>";
+                var html = "<html><head>";
+                html += "<style>div.img {box-shadow: 0px 2px 5px #ccc; margin-top: 10px; width: 93%; margin: 0 auto; padding: 2%; margin-bottom: 10px;}";
+                html += "div.img img {width: 50%; margin-top: 10px; height: auto; }";
+                html += "</style></head>";
+                html += "<body><div class='container' id='portfolio'></div></body></html>";
+                //$(w.document.head).html(headHtml);
+                $(w.document.body).html(html);
+
+                userRef.once("value")
+                .then(function(snapshot) {
+                  var projRef = firebase.database().ref('projects/' + projectID).orderByKey();
+                  projRef.on('value', function(snapshot) {
+                    var project = snapshot.val();
+                    var project_title = project.title;
+                    var project_location = project.location;
+
+                    console.log(project_title);
+
+                    var new_project = w.document.createElement('div');
+                    //new_project.style.borderWidth = "0";
+                    new_project.setAttribute("class", "img");
+                    var project_image = w.document.createElement("img");
+                    project_image.setAttribute("src", project.projImg);
+                    project_image.setAttribute("alt", "New project");
+                    var to_center = w.document.createElement('center');
+                    to_center.appendChild(project_image);
+                    new_project.appendChild(to_center);
+
+                    var new_title = w.document.createElement('div');
+                    new_title.setAttribute("class", "tit");
+                    new_title.appendChild(w.document.createTextNode(project.title));
+
+                    var new_loc = w.document.createElement('div');
+                    new_loc.setAttribute("class", "loc");
+                    new_loc.appendChild(w.document.createTextNode(project.location));
+                    new_loc.style.textAlign = "justify";
+
+
+                    var new_rate = w.document.createElement('div');
+                    new_rate.setAttribute("class", "tit");
+                    new_rate.innerHTML = "&#9733;&#9733;&#9733;&#9733;&#9733;"
+
+                    var new_description = w.document.createElement('div');
+                    new_description.setAttribute("class", "desc");
+                    new_description.appendChild(w.document.createTextNode(project.description));
+                    new_description.style.textAlign = "justify";
+ 
+                    new_project.appendChild(new_title);
+                    new_project.appendChild(new_loc);
+                    new_project.appendChild(new_rate);
+                    new_project.appendChild(new_description);
+
+                    var portfolio = w.document.getElementById("portfolio");
+                    portfolio.appendChild(new_project);
+                  });
+                });
+              }
+              $(link).click(newWindow);
+
+
+
+            });
           });
         });
       } else {
         window.location.href="index.html";
       }
-        // [START_EXCLUDE silent]
-        // [END_EXCLUDE]
-      });
+      }); //end of if(user)
 
       // [END authstatelistener]
       document.getElementById('quickstart-sign-out').addEventListener('click', signOut);
