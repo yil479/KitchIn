@@ -205,7 +205,6 @@
             new_description.style.textAlign = "justify";
             var project_link = document.createElement('a');
 
-            project_link.setAttribute("href",'#');
             project_link.style.borderWidth = "0";
             project_link.appendChild(new_title);
             new_project.appendChild(project_link);
@@ -420,12 +419,7 @@
               $(new_title).click(newWindow);
             });
           });
-
-
-
-          
-              
-              
+    
 
           var userRef = firebase.database().ref('users/' + userID);
           userRef.on('value', function(snapshot) {
