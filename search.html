@@ -143,6 +143,7 @@
       var searchNotFound = true;
       var oneBackButton = true;
       var projectRef = firebase.database().ref('projects/').orderByKey();
+
       projectRef.once("value")
       .then(function(snapshot) {
         snapshot.forEach(function(childSnapshot){
@@ -150,9 +151,9 @@
           var project_title = project.title;
           var project_location = project.location;
 
-
+          //if search is in project title or location
           if ((project_title.toLowerCase().indexOf(searchTerm.toLowerCase()) >= 0) || (project_location.toLowerCase().indexOf(searchTerm.toLowerCase()) >= 0)){
-            console.log(searchTerm);
+            //console.log(searchTerm);
             var portfolio = document.getElementById("portfolio");
             searchNotFound = false;
             if(oneBackButton){
@@ -213,6 +214,61 @@
             new_project.appendChild(new_description);
             var portfolio = document.getElementById("portfolio");
             portfolio.appendChild(new_project);
+
+            function newWindow() {
+                //makes new window 
+                var w = window.open('','/new', width=600,height=400,menubar=1,status=0,scrollbars=1,resizable=1);
+                var html = "<html><head>";
+                html += "<style>div.img {box-shadow: 0px 2px 5px #ccc; margin-top: 10px; width: 93%; margin: 0 auto; padding: 2%; margin-bottom: 10px;}";
+                html += "div.img img {width: 50%; margin-top: 10px; height: auto; }";
+                html += "</style></head>";
+                html += "<body><div class='container' id='portfolio'></div></body></html>";
+                $(w.document.body).html(html);
+
+                var project = childSnapshot.val();
+                var project_title = project.title;
+                var project_location = project.location;
+
+                var new_project = w.document.createElement('div');
+                //new_project.style.borderWidth = "0";
+                new_project.setAttribute("class", "img");
+                var project_image = w.document.createElement("img");
+                project_image.setAttribute("src", project.projImg);
+                project_image.setAttribute("alt", "New project");
+                //project_image.setAttribute("width", "100");
+                //project_image.setAttribute("height","200");
+                var to_center = w.document.createElement('center');
+                to_center.appendChild(project_image);
+                new_project.appendChild(to_center);
+
+                var new_title = w.document.createElement('div');
+                new_title.setAttribute("class", "tit");
+                new_title.appendChild(w.document.createTextNode(project.title));
+
+                var new_loc = w.document.createElement('div');
+                new_loc.setAttribute("class", "loc");
+                new_loc.appendChild(w.document.createTextNode(project.location));
+                new_loc.style.textAlign = "justify";
+
+
+                var new_rate = w.document.createElement('div');
+                new_rate.setAttribute("class", "tit");
+                new_rate.innerHTML = "&#9733;&#9733;&#9733;&#9733;&#9733;"
+
+                var new_description = w.document.createElement('div');
+                new_description.setAttribute("class", "desc");
+                new_description.appendChild(w.document.createTextNode(project.description));
+                new_description.style.textAlign = "justify";
+
+                new_project.appendChild(new_title);
+                new_project.appendChild(new_loc);
+                new_project.appendChild(new_rate);
+                new_project.appendChild(new_description);
+
+                var portfolio = w.document.getElementById("portfolio");
+                portfolio.appendChild(new_project);
+              }
+              $(new_title).click(newWindow);
           }
 
         });
@@ -257,7 +313,7 @@
           var userID = user.uid;
           var email = user.email;
 
-          console.log("here");
+          //console.log("here");
           var projectRef = firebase.database().ref('projects/').orderByKey();
           projectRef.once("value")
           .then(function(snapshot) {
@@ -295,26 +351,145 @@
               new_description.style.textAlign = "justify";
               var project_link = document.createElement('a');
 
-              project_link.setAttribute("href",'#');
+              //creates title link and adds to new post
               project_link.style.borderWidth = "0";
               project_link.appendChild(new_title);
               new_project.appendChild(project_link);
+
+              //add everything else to new post
               new_project.appendChild(new_loc);
               new_project.appendChild(new_rate);
               new_project.appendChild(new_description);
               var portfolio = document.getElementById("portfolio");
               portfolio.appendChild(new_project);
-              //var HR = document.createElement("HR");
-              //new_project.appendChild(HR);
+
+              //if title is clicked, new window opens
+              function newWindow() {
+                //makes new window 
+                var w = window.open('','/new', width=600,height=400,menubar=1,status=0,scrollbars=1,resizable=1);
+                var html = "<html><head>";
+                html += "<style>div.img {box-shadow: 0px 2px 5px #ccc; margin-top: 10px; width: 93%; margin: 0 auto; padding: 2%; margin-bottom: 10px;}";
+                html += "div.img img {width: 50%; margin-top: 10px; height: auto; }";
+                html += "</style></head>";
+                html += "<body><div class='container' id='portfolio'></div></body></html>";
+                $(w.document.body).html(html);
+
+                var project = childSnapshot.val();
+                var project_title = project.title;
+                var project_location = project.location;
+
+                var new_project = w.document.createElement('div');
+                //new_project.style.borderWidth = "0";
+                new_project.setAttribute("class", "img");
+                var project_image = w.document.createElement("img");
+                project_image.setAttribute("src", project.projImg);
+                project_image.setAttribute("alt", "New project");
+                //project_image.setAttribute("width", "100");
+                //project_image.setAttribute("height","200");
+                var to_center = w.document.createElement('center');
+                to_center.appendChild(project_image);
+                new_project.appendChild(to_center);
+
+                var new_title = w.document.createElement('div');
+                new_title.setAttribute("class", "tit");
+                new_title.appendChild(w.document.createTextNode(project.title));
+
+                var new_loc = w.document.createElement('div');
+                new_loc.setAttribute("class", "loc");
+                new_loc.appendChild(w.document.createTextNode(project.location));
+                new_loc.style.textAlign = "justify";
+
+
+                var new_rate = w.document.createElement('div');
+                new_rate.setAttribute("class", "tit");
+                new_rate.innerHTML = "&#9733;&#9733;&#9733;&#9733;&#9733;"
+
+                var new_description = w.document.createElement('div');
+                new_description.setAttribute("class", "desc");
+                new_description.appendChild(w.document.createTextNode(project.description));
+                new_description.style.textAlign = "justify";
+
+                new_project.appendChild(new_title);
+                new_project.appendChild(new_loc);
+                new_project.appendChild(new_rate);
+                new_project.appendChild(new_description);
+
+                var portfolio = w.document.getElementById("portfolio");
+                portfolio.appendChild(new_project);
+              }
+              $(new_title).click(newWindow);
             });
           });
+
+
+
+          function newWindow() {
+                //makes new window 
+                var w = window.open('','/new', width=600,height=400,menubar=1,status=0,scrollbars=1,resizable=1);
+                var html = "<html><head>";
+                html += "<style>div.img {box-shadow: 0px 2px 5px #ccc; margin-top: 10px; width: 93%; margin: 0 auto; padding: 2%; margin-bottom: 10px;}";
+                html += "div.img img {width: 50%; margin-top: 10px; height: auto; }";
+                html += "</style></head>";
+                html += "<body><div class='container' id='portfolio'></div></body></html>";
+                $(w.document.body).html(html);
+
+                  var projRef = firebase.database().ref('projects/' + projectID).orderByKey();
+                  projectRef.once("value")
+                  .then(function(childSnapshot) {
+                  //projRef.on('value', function(snapshot) {
+                    var project = childSnapshot.val();
+                    var project_title = project.title;
+                    var project_location = project.location;
+
+                    var new_project = w.document.createElement('div');
+                    //new_project.style.borderWidth = "0";
+                    new_project.setAttribute("class", "img");
+                    var project_image = w.document.createElement("img");
+                    project_image.setAttribute("src", project.projImg);
+                    project_image.setAttribute("alt", "New project");
+                    //project_image.setAttribute("width", "100");
+                    //project_image.setAttribute("height","200");
+                    var to_center = w.document.createElement('center');
+                    to_center.appendChild(project_image);
+                    new_project.appendChild(to_center);
+
+                    var new_title = w.document.createElement('div');
+                    new_title.setAttribute("class", "tit");
+                    new_title.appendChild(w.document.createTextNode(project.title));
+
+                    var new_loc = w.document.createElement('div');
+                    new_loc.setAttribute("class", "loc");
+                    new_loc.appendChild(w.document.createTextNode(project.location));
+                    new_loc.style.textAlign = "justify";
+
+
+                    var new_rate = w.document.createElement('div');
+                    new_rate.setAttribute("class", "tit");
+                    new_rate.innerHTML = "&#9733;&#9733;&#9733;&#9733;&#9733;"
+
+                    var new_description = w.document.createElement('div');
+                    new_description.setAttribute("class", "desc");
+                    new_description.appendChild(w.document.createTextNode(project.description));
+                    new_description.style.textAlign = "justify";
+ 
+                    new_project.appendChild(new_title);
+                    new_project.appendChild(new_loc);
+                    new_project.appendChild(new_rate);
+                    new_project.appendChild(new_description);
+
+                    var portfolio = w.document.getElementById("portfolio");
+                    portfolio.appendChild(new_project);
+                  //});
+                });
+              }
+              
 
           var userRef = firebase.database().ref('users/' + userID);
           userRef.on('value', function(snapshot) {
             var fullName = snapshot.val().fullname;
             var phoneNumber = snapshot.val().phone;
             //var fullName = snapshot.val().fullname;
-            console.log(fullName + phoneNumber);
+            //console.log(fullName + phoneNumber);
           });
 
         } else {
