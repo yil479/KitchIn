@@ -342,10 +342,10 @@
                 //makes new window 
                 var w = window.open('','/new', width=600,height=400,menubar=1,status=0,scrollbars=1,resizable=1);
                 var html = "<html><head>";
-                html += "<style>div.img {box-shadow: 0px 2px 5px #ccc; margin-top: 10px; width: 93%; margin: 0 auto; padding: 2%; margin-bottom: 10px;}";
-                html += "div.img img {width: 50%; margin-top: 10px; height: auto; }";
+                html += "<style>div.img { margin-top: 10px; width: 93%; margin: 0 auto; padding: 2%; margin-bottom: 10px;}";
+                html += "div.img img {width: 50%; margin-top: 10px; height: auto; }.login_button {background-color: #F05F40; width: 80px; padding: 5px; text-transform: uppercase; text-align: center; color: #fff; text-decoration: none; border-radius: 5px;}.login_button:hover{background-color: #e1e1e1; color: #666; text-decoration: none;} a{text-decoration: none;}";
                 html += "</style></head>";
-                html += "<body><div class='container' id='portfolio'></div></body></html>";
+                html += "<body><div class='container' id='portfolio'></div><a href=''><div class='login_button'>CLOSE</div></a></body></html>";
                 $(w.document.body).html(html);
 
                 var project = childSnapshot.val();
@@ -390,7 +390,12 @@
 
                 var portfolio = w.document.getElementById("portfolio");
                 portfolio.appendChild(new_project);
+
+                $(".login_button").click(function(){
+                  window.close();
+                });
               }
+              //click on link to open new window
               $(new_title).click(newWindow);
             });
       });
