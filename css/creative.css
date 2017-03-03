@@ -3,6 +3,71 @@
  * Copyright 2013-2016 Start Bootstrap
  * Licensed under MIT (https://github.com/BlackrockDigital/startbootstrap/blob/gh-pages/LICENSE)
  */
+ div.img {
+   box-shadow: 0px 2px 5px #ccc;
+   margin-top: 10px;
+   width: 93%;
+   margin: 0 auto;
+   padding: 2%;
+   margin-bottom: 10px;
+ }
+
+ div.img:hover {
+   box-shadow: 0px 2px 5px #aaa;
+ }
+
+ div.img img {
+   width: 100%;
+   margin-top: 10px;
+   height: auto;
+ }
+
+ div.tit {
+   padding: 5px;
+   margin: 5px;
+   text-align: left;
+   font-size: 20px;
+ }
+ div.desc {
+   padding: 5px;
+   margin: 5px;
+   text-align: center;
+   overflow:hidden;
+   white-space:nowrap;
+   text-overflow: ellipsis;
+ }
+ div.loc {
+   padding: 5px;
+   margin: 3px;
+   text-align: center;
+   overflow:hidden;
+   white-space:nowrap;
+   text-overflow: ellipsis;
+ }
+ .create {
+   width: 60%;
+   background-color: #F05F40;
+   position: relative;
+   min-height: 1px;
+   padding-right: 15px;
+   padding-left: 15px;
+   padding-top: 8px;
+   padding-bottom: 8px;
+   margin-bottom: 20px;
+   min-height: 28px;
+   color: #fff;
+   border-radius: 5px;
+   word-wrap: normal;
+ }
+
+ .create:hover {
+   background-color: #e1e1e1;
+   border: 1px solid #e1e1e1;
+   color: #666;
+ }
+
+
+
  html,
  body {
   height: 100%;

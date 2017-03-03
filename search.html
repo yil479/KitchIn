@@ -143,6 +143,7 @@
       var searchNotFound = true;
       var oneBackButton = true;
       var projectRef = firebase.database().ref('projects/').orderByKey();
+
       projectRef.once("value")
       .then(function(snapshot) {
         snapshot.forEach(function(childSnapshot){
@@ -150,9 +151,9 @@
           var project_title = project.title;
           var project_location = project.location;
 
-
+          //if search is in project title or location
           if ((project_title.toLowerCase().indexOf(searchTerm.toLowerCase()) >= 0) || (project_location.toLowerCase().indexOf(searchTerm.toLowerCase()) >= 0)){
-            console.log(searchTerm);
+            //console.log(searchTerm);
             var portfolio = document.getElementById("portfolio");
             searchNotFound = false;
             if(oneBackButton){
@@ -203,8 +204,10 @@
             new_description.appendChild(document.createTextNode(project.description));
             new_description.style.textAlign = "justify";
             var project_link = document.createElement('a');
+            var linkID = childSnapshot.key;
+            var strLink = "foodprofile.html" + "?key=" + linkID;
 
-            project_link.setAttribute("href",'#');
+            project_link.setAttribute("href",strLink);
             project_link.style.borderWidth = "0";
             project_link.appendChild(new_title);
             new_project.appendChild(project_link);
@@ -213,36 +216,37 @@
             new_project.appendChild(new_description);
             var portfolio = document.getElementById("portfolio");
             portfolio.appendChild(new_project);
-          }
 
-        });
+            
 
-      }).then(function(onComplete){
-        if(searchNotFound){
-          alert("Sorry, we couldn't find what you're looking for!");
-          window.location.href = "search.html";
+          });
 
-        }
-      }, function(error){
-        console.log("Something went wrong!");
-      });
-
-
-    }
-    else{
-      alert("You need to enter something before searching!")
-    }
-
+}).then(function(onComplete){
+  if(searchNotFound){
+    alert("Sorry, we couldn't find what you're looking for!");
+    window.location.href = "search.html";
 
   }
-  function signOut(){
-    firebase.auth().signOut().then(function() {
-      console.log('Signed Out');
-      window.location.href="index.html";
-    }, function(error) {
-      console.error('Sign Out Error', error);
-    });
-  }
+}, function(error){
+  console.log("Something went wrong!");
+});
+
+
+}
+else{
+  alert("You need to enter something before searching!")
+}
+
+
+}
+function signOut(){
+  firebase.auth().signOut().then(function() {
+    console.log('Signed Out');
+    window.location.href="index.html";
+  }, function(error) {
+    console.error('Sign Out Error', error);
+  });
+}
 
     /**
      * initApp handles setting up UI event listeners and registering Firebase auth listeners:
@@ -257,7 +261,7 @@
           var userID = user.uid;
           var email = user.email;
 
-          console.log("here");
+          //console.log("here");
           var projectRef = firebase.database().ref('projects/').orderByKey();
           projectRef.once("value")
           .then(function(snapshot) {
@@ -294,28 +298,28 @@
               new_description.appendChild(document.createTextNode(project.description));
               new_description.style.textAlign = "justify";
               var project_link = document.createElement('a');
+              var linkID = childSnapshot.key;
+              var strLink = "foodprofile.html" + "?key=" + linkID;
 
-              project_link.setAttribute("href",'#');
+              project_link.setAttribute("href",strLink);
+
+              //creates title link and adds to new post
               project_link.style.borderWidth = "0";
               project_link.appendChild(new_title);
               new_project.appendChild(project_link);
+
+              //add everything else to new post
               new_project.appendChild(new_loc);
               new_project.appendChild(new_rate);
               new_project.appendChild(new_description);
               var portfolio = document.getElementById("portfolio");
               portfolio.appendChild(new_project);
-              //var HR = document.createElement("HR");
-              //new_project.appendChild(HR);
+
+
             });
           });
 
-          var userRef = firebase.database().ref('users/' + userID);
-          userRef.on('value', function(snapshot) {
-            var fullName = snapshot.val().fullname;
-            var phoneNumber = snapshot.val().phone;
-            //var fullName = snapshot.val().fullname;
-            console.log(fullName + phoneNumber);
-          });
+
 
         } else {
           window.location.href="index.html";
@@ -357,7 +361,7 @@
             <a class="page-scroll" href="./search.html">Food Court</a>
           </li>
           <li>
-            <a class="page-scroll" href="./help_signedin.html">Help</a>
+            <a class="page-scroll" href="./help_signedin.html">FAQ</a>
           </li>
           <li>
             <a href="#" id="quickstart-sign-out">Sign Out</a>
