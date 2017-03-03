@@ -23,6 +23,7 @@
   <link href="vendor/magnific-popup/magnific-popup.css" rel="stylesheet">
 
   <!-- Theme CSS -->
+  <link href="css/creative.css" rel="stylesheet">
   <link href="css/creative.min.css" rel="stylesheet">
 
   <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
@@ -118,14 +119,7 @@
   firebase.initializeApp(config);
 </script>
 <script type="text/javascript">
-  function signOut(){
-    firebase.auth().signOut().then(function() {
-      console.log('Signed Out');
-      window.location.href="index.html";
-    }, function(error) {
-      console.error('Sign Out Error', error);
-    });
-  }
+
 
     /**
      * initApp handles setting up UI event listeners and registering Firebase auth listeners:
@@ -133,58 +127,52 @@
      *    out, and that is where we update the UI.
      */
      function initApp() {
-      var projectRef = firebase.database().ref('projects/').orderByKey();
-          projectRef.once("value")
-          .then(function(snapshot) {
-            snapshot.forEach(function(childSnapshot){
-              var project = childSnapshot.val();
-              var new_project = document.createElement('div');
-              new_project.style.borderWidth = "0";
-              new_project.setAttribute("class", "img");
-              var project_image = document.createElement("img");
-              project_image.setAttribute("src", project.projImg);
-              project_image.setAttribute("alt", "New project");
-              project_image.setAttribute("width", "100");
-              project_image.setAttribute("height","200");
-              var to_center = document.createElement('center');
-              to_center.appendChild(project_image);
-              new_project.appendChild(to_center);
+      var a = window.location.toString();
+      var project_name = a.substring(a.indexOf("=")+1);
+      var doc_location = document.getElementById("location");
+      var doc_title = document.getElementById("title");
+      var doc_img = document.getElementById("source-image");
+      var doc_description = document.getElementById("description");
+      var doc_rating = document.getElementById("rating");
+      var project_ref = firebase.database().ref('projects/' + project_name);
+      project_ref.on('value', function(snapshot) {
+        var location = snapshot.val().location;
+        if (location != null)
+          doc_location.innerHTML = location;
+        else
+          doc_location.innerHTML = "To be updated!";
 
-              var new_title = document.createElement('div');
-              new_title.setAttribute("class", "tit");
-              new_title.appendChild(document.createTextNode(project.title));
+        var title = snapshot.val().title;
+        if (title != null)
+          doc_title.innerHTML = title;
+        else
+          doc_title.innerHTML = "To be updated!";
 
-              var new_loc = document.createElement('div');
-              new_loc.setAttribute("class", "loc");
-              new_loc.appendChild(document.createTextNode(project.location));
-              new_loc.style.textAlign = "justify";
+        var description = snapshot.val().description;
+        if (description != null)
+          doc_description.innerHTML = description;
+        else
+          doc_description.innerHTML = "To be updated!";
+
+        
+
+        // var rating = snapshot.val().goals;
+        // if (goals != null)
+        //   doc_goals.innerHTML = goals;
+        // else
+        doc_rating.innerHTML = "&#9733;&#9733;&#9733;&#9733;&#9733;";
 
 
-              var new_rate = document.createElement('div');
-              new_rate.setAttribute("class", "tit");
-              new_rate.innerHTML = "&#9733;&#9733;&#9733;&#9733;&#9733;"
+        var image = snapshot.val().projImg;
+        if (image !=null)
+        {
+          doc_img.setAttribute("src", image);
+          doc_img.setAttribute("style", "width: 100%; height: auto");
+        }
 
-              var new_description = document.createElement('div');
-              new_description.setAttribute("class", "desc");
-              new_description.appendChild(document.createTextNode(project.description));
-              new_description.style.textAlign = "justify";
-              var project_link = document.createElement('a');
-              var linkID = childSnapshot.key;
-              var strLink = "foodprofile_signedout.html" + "?key=" + linkID;
 
-              project_link.setAttribute("href",strLink);
-              project_link.style.borderWidth = "0";
-              project_link.appendChild(new_title);
-              new_project.appendChild(project_link);
-              new_project.appendChild(new_loc);
-              new_project.appendChild(new_rate);
-              new_project.appendChild(new_description);
-              var portfolio = document.getElementById("portfolio");
-              portfolio.appendChild(new_project);
-              //var HR = document.createElement("HR");
-              //new_project.appendChild(HR);
-              });
-            });
+      });
+      
     }
 
     window.onload = function() {
@@ -212,54 +200,81 @@
             <a class="page-scroll" href="./index.html">Home</a>
           </li>
           <li>
-            <a class="page-scroll" href="./signup.html">Sign Up</a>
-          </li>
-          <li>
-            <a class="page-scroll" href="./login.html">Login</a>
-          </li>
-          <li>
-            <a class="page-scroll" href="./help_signedin.html">Help</a>
-          </li>
-        </ul>
-      </div>
-      <!-- /.navbar-collapse -->
+           <a class="page-scroll" href="./signup.html">Sign Up</a>
+         </li>
+         <li>
+          <a class="page-scroll" href="./login.html">Login</a>
+        </li>
+        <li>
+          <a class="page-scroll" href="./help.html">Help</a>
+        </li>
+      </ul>
     </div>
-    <!-- /.container-fluid -->
-  </nav>
-  <section>
-    <div class="container" id="portfolio">
+    <!-- /.navbar-collapse -->
+  </div>
+  <!-- /.container-fluid -->
+</nav>
+<!-- Page Header -->
 
-      <!-- Page Header -->
-      <div class="row" style="position: relative; bottom: 20px;">
-        <div class="col-lg-12">
-          <center><h4 style="text-transform: uppercase; margin-bottom: -10px;"><strong>Discover</strong> Food</h4><hr></center>
-        </div>
+<section>
+  <div class="container">
+
+
+    <!-- Page Header -->
+    <div class="row">
+      <div class="col-lg-12">
+        <center><h3 id="title"></h3></center>
+        <hr>
       </div>
-      <!-- <div id="search">
-        <input type="text" id="searchbox" placeholder="Search by food or location" />
-        <button type="button" id="search_button" onclick="search()">SEARCH</button>
-      </div> -->
+    </div> 
+    <!-- /.row -->
+    <!-- Projects Row -->
 
+    <div class="row">
+      <div id="project-image" class="col-lg-12">
+        <center>
+          <div class="project_image"><img id="source-image" src="" alt="Project image url uploaded is incorrect!" style="height: auto;width: 100%;"/> </div>  
 
-
+        </center>  
+      </div>
+      
+      <div id="project-writeup" class="col-lg-12">
+      <center><b>Description</b>  </center> 
+        <center><p id="description"></p></center>
+        <hr />
+        
+        <center><b>Location</b></center>
+        
+        <center><p id="location"></p></center>
+        <hr />
+        
+        <center><b>Rating</b></center><br />
+        <center><p id="rating"></p> </center>
+        
+        <hr>
+      </div>
+      
 
     </div>
+  </div>
 
-  </section>
 
-  <!-- jQuery -->
-  <script src="vendor/jquery/jquery.min.js"></script>
+</section>
 
-  <!-- Bootstrap Core JavaScript -->
-  <script src="vendor/bootstrap/js/bootstrap.min.js"></script>
 
-  <!-- Plugin JavaScript -->
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-easing/1.3/jquery.easing.min.js"></script>
-  <script src="vendor/scrollreveal/scrollreveal.min.js"></script>
-  <script src="vendor/magnific-popup/jquery.magnific-popup.min.js"></script>
+<!-- jQuery -->
+<script src="vendor/jquery/jquery.min.js"></script>
 
-  <!-- Theme JavaScript -->
-  <script src="js/creative.min.js"></script>
+<!-- Bootstrap Core JavaScript -->
+<script src="vendor/bootstrap/js/bootstrap.min.js"></script>
+
+<!-- Plugin JavaScript -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-easing/1.3/jquery.easing.min.js"></script>
+<script src="vendor/scrollreveal/scrollreveal.min.js"></script>
+<script src="vendor/magnific-popup/jquery.magnific-popup.min.js"></script>
+
+<!-- Theme JavaScript -->
+<script src="js/creative.min.js"></script>
 
 </body>
 

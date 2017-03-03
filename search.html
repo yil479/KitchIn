@@ -204,7 +204,10 @@
             new_description.appendChild(document.createTextNode(project.description));
             new_description.style.textAlign = "justify";
             var project_link = document.createElement('a');
+            var linkID = childSnapshot.key;
+            var strLink = "foodprofile.html" + "?key=" + linkID;
 
+            project_link.setAttribute("href",strLink);
             project_link.style.borderWidth = "0";
             project_link.appendChild(new_title);
             new_project.appendChild(project_link);
@@ -214,90 +217,36 @@
             var portfolio = document.getElementById("portfolio");
             portfolio.appendChild(new_project);
 
-            function newWindow() {
-                //makes new window 
-                var w = window.open('','/new', width=600,height=400,menubar=1,status=0,scrollbars=1,resizable=1);
-                var html = "<html><head>";
-                html += "<style>div.img {box-shadow: 0px 2px 5px #ccc; margin-top: 10px; width: 93%; margin: 0 auto; padding: 2%; margin-bottom: 10px;}";
-                html += "div.img img {width: 50%; margin-top: 10px; height: auto; }";
-                html += "</style></head>";
-                html += "<body><div class='container' id='portfolio'></div></body></html>";
-                $(w.document.body).html(html);
+            
 
-                var project = childSnapshot.val();
-                var project_title = project.title;
-                var project_location = project.location;
+          });
 
-                var new_project = w.document.createElement('div');
-                //new_project.style.borderWidth = "0";
-                new_project.setAttribute("class", "img");
-                var project_image = w.document.createElement("img");
-                project_image.setAttribute("src", project.projImg);
-                project_image.setAttribute("alt", "New project");
-                //project_image.setAttribute("width", "100");
-                //project_image.setAttribute("height","200");
-                var to_center = w.document.createElement('center');
-                to_center.appendChild(project_image);
-                new_project.appendChild(to_center);
-
-                var new_title = w.document.createElement('div');
-                new_title.setAttribute("class", "tit");
-                new_title.appendChild(w.document.createTextNode(project.title));
-
-                var new_loc = w.document.createElement('div');
-                new_loc.setAttribute("class", "loc");
-                new_loc.appendChild(w.document.createTextNode(project.location));
-                new_loc.style.textAlign = "justify";
-
-
-                var new_rate = w.document.createElement('div');
-                new_rate.setAttribute("class", "tit");
-                new_rate.innerHTML = "&#9733;&#9733;&#9733;&#9733;&#9733;"
-
-                var new_description = w.document.createElement('div');
-                new_description.setAttribute("class", "desc");
-                new_description.appendChild(w.document.createTextNode(project.description));
-                new_description.style.textAlign = "justify";
-
-                new_project.appendChild(new_title);
-                new_project.appendChild(new_loc);
-                new_project.appendChild(new_rate);
-                new_project.appendChild(new_description);
-
-                var portfolio = w.document.getElementById("portfolio");
-                portfolio.appendChild(new_project);
-              }
-              $(new_title).click(newWindow);
-          }
-
-        });
-
-      }).then(function(onComplete){
-        if(searchNotFound){
-          alert("Sorry, we couldn't find what you're looking for!");
-          window.location.href = "search.html";
-
-        }
-      }, function(error){
-        console.log("Something went wrong!");
-      });
-
-
-    }
-    else{
-      alert("You need to enter something before searching!")
-    }
-
+}).then(function(onComplete){
+  if(searchNotFound){
+    alert("Sorry, we couldn't find what you're looking for!");
+    window.location.href = "search.html";
 
   }
-  function signOut(){
-    firebase.auth().signOut().then(function() {
-      console.log('Signed Out');
-      window.location.href="index.html";
-    }, function(error) {
-      console.error('Sign Out Error', error);
-    });
-  }
+}, function(error){
+  console.log("Something went wrong!");
+});
+
+
+}
+else{
+  alert("You need to enter something before searching!")
+}
+
+
+}
+function signOut(){
+  firebase.auth().signOut().then(function() {
+    console.log('Signed Out');
+    window.location.href="index.html";
+  }, function(error) {
+    console.error('Sign Out Error', error);
+  });
+}
 
     /**
      * initApp handles setting up UI event listeners and registering Firebase auth listeners:
@@ -349,6 +298,10 @@
               new_description.appendChild(document.createTextNode(project.description));
               new_description.style.textAlign = "justify";
               var project_link = document.createElement('a');
+              var linkID = childSnapshot.key;
+              var strLink = "foodprofile.html" + "?key=" + linkID;
+
+              project_link.setAttribute("href",strLink);
 
               //creates title link and adds to new post
               project_link.style.borderWidth = "0";
@@ -362,72 +315,11 @@
               var portfolio = document.getElementById("portfolio");
               portfolio.appendChild(new_project);
 
-              //if title is clicked, new window opens
-              function newWindow() {
-                //makes new window 
-                var w = window.open('','/new', width=600,height=400,menubar=1,status=0,scrollbars=1,resizable=1);
-                var html = "<html><head>";
-                html += "<style>div.img {box-shadow: 0px 2px 5px #ccc; margin-top: 10px; width: 93%; margin: 0 auto; padding: 2%; margin-bottom: 10px;}";
-                html += "div.img img {width: 50%; margin-top: 10px; height: auto; }";
-                html += "</style></head>";
-                html += "<body><div class='container' id='portfolio'></div></body></html>";
-                $(w.document.body).html(html);
 
-                var project = childSnapshot.val();
-                var project_title = project.title;
-                var project_location = project.location;
-
-                var new_project = w.document.createElement('div');
-                //new_project.style.borderWidth = "0";
-                new_project.setAttribute("class", "img");
-                var project_image = w.document.createElement("img");
-                project_image.setAttribute("src", project.projImg);
-                project_image.setAttribute("alt", "New project");
-                //project_image.setAttribute("width", "100");
-                //project_image.setAttribute("height","200");
-                var to_center = w.document.createElement('center');
-                to_center.appendChild(project_image);
-                new_project.appendChild(to_center);
-
-                var new_title = w.document.createElement('div');
-                new_title.setAttribute("class", "tit");
-                new_title.appendChild(w.document.createTextNode(project.title));
-
-                var new_loc = w.document.createElement('div');
-                new_loc.setAttribute("class", "loc");
-                new_loc.appendChild(w.document.createTextNode(project.location));
-                new_loc.style.textAlign = "justify";
-
-
-                var new_rate = w.document.createElement('div');
-                new_rate.setAttribute("class", "tit");
-                new_rate.innerHTML = "&#9733;&#9733;&#9733;&#9733;&#9733;"
-
-                var new_description = w.document.createElement('div');
-                new_description.setAttribute("class", "desc");
-                new_description.appendChild(w.document.createTextNode(project.description));
-                new_description.style.textAlign = "justify";
-
-                new_project.appendChild(new_title);
-                new_project.appendChild(new_loc);
-                new_project.appendChild(new_rate);
-                new_project.appendChild(new_description);
-
-                var portfolio = w.document.getElementById("portfolio");
-                portfolio.appendChild(new_project);
-              }
-              $(new_title).click(newWindow);
             });
           });
-    
 
-          var userRef = firebase.database().ref('users/' + userID);
-          userRef.on('value', function(snapshot) {
-            var fullName = snapshot.val().fullname;
-            var phoneNumber = snapshot.val().phone;
-            //var fullName = snapshot.val().fullname;
-            //console.log(fullName + phoneNumber);
-          });
+
 
         } else {
           window.location.href="index.html";
