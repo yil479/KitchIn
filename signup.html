@@ -88,11 +88,11 @@
       var password = document.getElementById('password').value;
       var confirmpassword = document.getElementById('confirmpassword').value;
       if (email.length < 4) {
-        alert('Please enter an email address.');
+        alert('Invalid email address.');
         return;
       }
       if (password.length < 4) {
-        alert('Please enter a password.');
+        alert('Please enter a password at least 5 characters long.');
         return;
       }
       if (confirmpassword != password) {
